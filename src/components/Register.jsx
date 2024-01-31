@@ -33,7 +33,7 @@ function Register() {
         e.preventDefault();
         try {
             console.log(formData);
-            const result = await axios.post("/auth/signup", formData)
+            const result = await axios.post("/signup", formData)
             console.log(result);
             tokenDispatch({ type: "SET_TOKEN", payload: result.data.token })
             userDispatch({ type: "SET_USER", payload: result.data.user })

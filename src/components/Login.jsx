@@ -19,22 +19,35 @@ import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 
 function Login() {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+  console.log(formData);
     const { userToken, tokenDispatch, userDispatch } = useContext(TokenContext);
     const [error, setError] = useState();
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const result = await axios.post("/auth/login", formData)
+            const result = await axios.post("/signin", formData)
+            console.log(result);
             tokenDispatch({ type: "SET_TOKEN", payload: result.data.token })
             userDispatch({ type: "SET_USER", payload: result.data.user })
             localStorage.setItem("jwt",JSON.stringify(result.data.token))
         } catch (error) {
             console.log(error);
-            setError({ message: error.response.data.message })
+            setError({ message: error.message })
         }
     }
 
+    // const handleChange = (e) => {
+    //   // Update the form data state with the new value
+    //   setFormData({
+    //     ...formData, // preserve existing form data
+    //     [e.target.name]: e.target.value, // update the changed field
+    //   });
+    // };
+  
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value })
@@ -67,9 +80,8 @@ function Login() {
                   id="email"
                   label="Email Address"
                   name="email"
-                  autoComplete="email"
                   autoFocus
-                  handleChange={handleChange}
+                  onChange={handleChange}
                 />
                 <TextField
                   margin="normal"
@@ -79,7 +91,6 @@ function Login() {
                   label="Password"
                   type="password"
                   id="password"
-                  autoComplete="current-password"
                   onChange={handleChange}
                 />
       
